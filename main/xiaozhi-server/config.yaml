@@ -25,6 +25,11 @@ server:
   # 所以如果你使用docker部署时，将vision_explain设置成局域网地址
   # 如果你使用公网部署时，将vision_explain设置成公网地址
   vision_explain: http://你的ip或者域名:端口号/mcp/vision/explain
+  # OTA接口地址
+  # 如果不填，系统会自动生成: http://{ip}:{http_port}/xiaozhi/ota/
+  # 如果你使用docker部署或使用公网部署(使用ssl、域名)时，需要手动设置成局域网地址或公网地址
+  # 这个配置会通过 /config/ota 接口返回给前端（如 digital-human 模块）
+  ota_url: ""
   # OTA返回信息时区偏移量
   timezone_offset: +8
   # 认证配置

@@ -352,6 +352,30 @@ class OTAHandler(BaseHandler):
             self._add_cors_headers(response)
             return response
 
+    async def handle_config_ota(self, request):
+        """返回 OTA 和 WebSocket 配置给前端 (digital-human)"""
+        try:
+            server_config = self.config["server"]
+            local_ip = get_local_ip()
+            http_port = int(server_config.get("http_port", 8003))
+            websocket_port = int(server_config.get("port", 8000))
+
+            # 构造 OTA URL：优先使用配置的 ota_url，否则自动生成
+            ota_url = server_config.get("ota_url", "")
+            if not ota_url or "你的" in ota_url:
+                ota_url = f"http://{local_ip}:{http_port}/xiaozhi/ota/"
+
+            # 构造 WebSocket URL
+            ws_url = self._get_websocket_url(local_ip, websocket_port)
+
+            return web.json_response({
+                "ota_url": ota_url,
+                "websocket_url": ws_url,
+            })
+        except Exception as e:
+            self.logger.bind(tag=TAG).error(f"获取 OTA 配置失败: {e}")
+            return web.json_response({}, status=500)
+
     async def handle_get(self, request):
         """处理 OTA GET 请求"""
         try:

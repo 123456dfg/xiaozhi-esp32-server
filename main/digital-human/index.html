@@ -401,6 +401,19 @@
 
     <!-- 全局错误处理 -->
     <script>
+        // 自动获取 OTA 配置
+        fetch('http://127.0.0.1:8003/config/ota')
+            .then(r => r.ok ? r.json() : Promise.reject())
+            .then(data => {
+                const otaInput = document.getElementById('otaUrl');
+                if (otaInput && data.ota_url) {
+                    otaInput.value = data.ota_url;
+                }
+            })
+            .catch(() => {
+                // 获取失败保持默认值
+            });
+
         // 添加全局错误处理
         window.addEventListener('error', function (event) {
             console.error('全局错误:', event.error);

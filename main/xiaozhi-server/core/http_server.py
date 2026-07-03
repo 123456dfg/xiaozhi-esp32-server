@@ -72,6 +72,11 @@ class SimpleHttpServer:
                         web.options(
                             "/mcp/vision/explain", self.vision_handler.handle_options
                         ),
+                        # 前端 OTA 配置接口 (digital-human 自动获取)
+                        web.get("/config/ota", self.ota_handler.handle_config_ota),
+                        web.options(
+                            "/config/ota", self.ota_handler.handle_options
+                        ),
                     ]
                 )
 
